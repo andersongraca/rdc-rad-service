@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços - RDC RAD SERVICE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos específicos para a página de serviços */
+        .services-interactive-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 50px;
+            align-items: start;
+        }
+
+        .services-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .service-item {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 5px solid transparent;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.15), transparent);
+            transition: left 0.5s;
+        }
+
+        .service-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .service-item:hover::before {
+            left: 100%;
+        }
+
+        .service-item.active {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: var(--dark);
+            border-left-color: var(--dark);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .service-item.active h3 {
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .service-item p {
+            margin: 5px 0 0 0;
+            font-size: 0.9rem;
+            color: var(--gray);
+            transition: all 0.3s ease;
+        }
+
+        .service-item.active p {
+            color: rgba(51, 51, 51, 0.7);
+        }
+
+        .service-icon-small {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .service-item.active .service-icon-small {
+            color: var(--dark);
+            transform: scale(1.1);
+        }
+
+        .services-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            position: relative;
+            min-height: 600px;
+        }
+
+        .service-detail {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .service-detail.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            position: relative;
+            top: auto;
+            left: auto;
+        }
+
+        .service-image-container {
+            width: 100%;
+            height: 350px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            background: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .service-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .service-detail.active .service-image-container img {
+            animation: zoomIn 0.5s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .service-details-text {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .service-details-text h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .service-details-text h2 i {
+            color: var(--primary-color);
+            font-size: 2rem;
+        }
+
+        .service-topics {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .topic-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .topic-item:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        .topic-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .topic-item p {
+            margin: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Responsivo */
+        @media (max-width: 1024px) {
+            .services-interactive-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .services-sidebar {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .service-item h3 {
+                font-size: 1rem;
+            }
+
+            .service-item p {
+                display: none;
+            }
+
+            .services-content {
+                min-height: 500px;
+            }
+
+            .service-image-container {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .services-interactive-container {
+                grid-template-columns: 1fr;
+            }
+
+            .services-sidebar {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .service-item {
+                padding: 15px;
+            }
+
+            .service-item h3 {
+                font-size: 0.95rem;
+            }
+
+            .service-details-text h2 {
+                font-size: 1.5rem;
+            }
+
+            .service-image-container {
+                height: 250px;
+            }
+
+            .services-content {
+                min-height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .services-interactive-container {
+                gap: 20px;
+            }
+
+            .services-sidebar {
+                grid-template-columns: 1fr;
+            }
+
+            .service-item {
+                padding: 12px;
+            }
+
+            .service-item h3 {
+                font-size: 0.9rem;
+            }
+
+            .service-icon-small {
+                font-size: 1.2rem;
+            }
+
+            .service-details-text h2 {
+                font-size: 1.3rem;
+            }
+
+            .service-image-container {
+                height: 200px;
+            }
+
+            .topic-item {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animação de entrada */
+        .service-item {
+            animation: slideInUp 0.5s ease forwards;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .service-item:nth-child(1) { animation-delay: 0.1s; }
+        .service-item:nth-child(2) { animation-delay: 0.2s; }
+        .service-item:nth-child(3) { animation-delay: 0.3s; }
+        .service-item:nth-child(4) { animation-delay: 0.4s; }
+        .service-item:nth-child(5) { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-text">
+                    <h1>RDC RAD SERVICE</h1>
+                    <p>Física Médica e Radioproteção</p>
+                </div>
+            </div>
+            <div class="header-info">
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>rdc.radservice@gmail.com</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Av. Pedro Paes de Azevedo, 194 Salgado Filho, Aracaju - SE</span>
+                </div>
+                <div class="info-item social-icons-top">
+                    <a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <nav class="nav">
+            <div class="container nav-container">
+                <ul class="nav-menu" id="navMenu">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="sobre.html" class="nav-link">Sobre nós</a></li>
+                    <li class="nav-item"><a href="time.html" class="nav-link">Equipe</a></li>
+                    <li class="nav-item"><a href="servicos.html" class="nav-link active">Serviços</a></li>
+                    <li class="nav-item"><a href="qualidade.html" class="nav-link">Controle de Qualidade</a></li>
+                    
+                    <li class="nav-item"><a href="contato.html" class="nav-link">Contato</a></li>
+                    <li class="nav-item"><a href="login.html" class="nav-link">Login</a></li>
+                </ul>
+                <button class="nav-toggle" id="navToggle"><i class="fas fa-bars"></i></button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="servicos" class="section bg-light">
+            <div class="container">
+                <div class="text-center">
+                    <h2 class="section-title">Nossos Serviços</h2>
+                    <p class="section-subtitle">Oferecemos soluções completas em proteção radiológica e física médica com tecnologias avançadas e profissionais especializados.</p>
+                </div>
+
+                <div class="services-interactive-container">
+                    <!-- Sidebar com lista de serviços -->
+                    <div class="services-sidebar">
+                        <div class="service-item active" data-service="protecao-radiologica">
+                            <h3>
+                                <i class="fas fa-shield-alt service-icon-small"></i>
+                                Assessoria em Proteção Radiológica
+                            </h3>
+                            <p>Avaliação e análise completa</p>
+                        </div>
+
+                        <div class="service-item" data-service="controle-qualidade">
+                            <h3>
+                                <i class="fas fa-check-circle service-icon-small"></i>
+                                Controle de Qualidade de Equipamentos
+                            </h3>
+                            <p>Testes e calibração</p>
+                        </div>
+
+                        <div class="service-item" data-service="calculo-blindagem">
+                            <h3>
+                                <i class="fas fa-layer-group service-icon-small"></i>
+                                Cálculo de Blindagem e Levantamento Radiométrico
+                            </h3>
+                            <p>Avaliação e dimensionamento</p>
+                        </div>
+
+                        <div class="service-item" data-service="treinamento">
+                            <h3>
+                                <i class="fas fa-graduation-cap service-icon-small"></i>
+                                Treinamento e Capacitação
+                            </h3>
+                            <p>Cursos e workshops</p>
+                        </div>
+
+                        <div class="service-item" data-service="consultoria">
+                            <h3>
+                                <i class="fas fa-briefcase service-icon-small"></i>
+                                Consultoria Especializada
+                            </h3>
+                            <p>Orientação técnica especializada</p>
+                        </div>
+                    </div>
+
+                    <!-- Conteúdo dos serviços -->
+                    <div class="services-content">
+                        <!-- Assessoria em Proteção Radiológica -->
+                        <div class="service-detail active" data-service="protecao-radiologica">
+                            <div class="service-image-container">
+                                <img src="assets/protecao_radiologica.jpg" alt="Assessoria em Proteção Radiológica">
+                            </div>
+                            <div class="service-details-text">
+                                <h2>
+                                    <i class="fas fa-shield-alt"></i>
+                                    Assessoria em Proteção Radiológica
+                                </h2>
+                                <div class="service-topics">
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Avaliação e análise de riscos radiológicos:</strong> Diagnóstico completo dos riscos presentes em ambientes radiológicos, identificando pontos críticos e oportunidades de melhoria.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Desenvolvimento e implementação de programas de radioproteção:</strong> Criação de programas personalizados que atendem às necessidades específicas da sua instituição, garantindo conformidade regulatória.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Auditorias e inspeções de segurança radiológica:</strong> Verificações periódicas para garantir a manutenção dos padrões de segurança e identificar necessidades de ajustes.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Treinamento e capacitação de equipe em radioproteção:</strong> Programas educacionais contínuos para manter sua equipe atualizada com as melhores práticas da indústria.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Controle de Qualidade de Equipamentos -->
+                        <div class="service-detail" data-service="controle-qualidade">
+                            <div class="service-image-container">
+                                <img src="assets/controle_qualidade.jpg" alt="Controle de Qualidade de Equipamentos">
+                            </div>
+                            <div class="service-details-text">
+                                <h2>
+                                    <i class="fas fa-check-circle"></i>
+                                    Controle de Qualidade de Equipamentos
+                                </h2>
+                                <div class="service-topics">
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Testes e avaliações de equipamentos radiológicos:</strong> Realização de testes técnicos abrangentes para garantir o funcionamento adequado e a segurança dos equipamentos.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Calibração e manutenção preventiva de equipamentos:</strong> Serviços de calibração precisos e programas de manutenção preventiva para prolongar a vida útil dos equipamentos.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Garantia de conformidade com padrões regulatórios:</strong> Asseguramento de que todos os equipamentos atendem aos padrões internacionais e regulamentações locais vigentes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cálculo de Blindagem e Levantamento Radiométrico -->
+                        <div class="service-detail" data-service="calculo-blindagem">
+                            <div class="service-image-container">
+                                <img src="assets/calculo_blindagem.jpg" alt="Cálculo de Blindagem e Levantamento Radiométrico">
+                            </div>
+                            <div class="service-details-text">
+                                <h2>
+                                    <i class="fas fa-layer-group"></i>
+                                    Cálculo de Blindagem e Levantamento Radiométrico
+                                </h2>
+                                <div class="service-topics">
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Avaliação e dimensionamento de blindagens radiológicas:</strong> Cálculos precisos para determinar a espessura e tipo de blindagem necessária em diferentes ambientes.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Levantamentos radiométricos para análise de exposição à radiação:</strong> Medições detalhadas de níveis de radiação para avaliar a exposição e identificar áreas de risco.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Implementação de medidas corretivas e preventivas:</strong> Desenvolvimento e execução de planos de ação para minimizar riscos e garantir a segurança contínua.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Treinamento e Capacitação -->
+                        <div class="service-detail" data-service="treinamento">
+                            <div class="service-image-container">
+                                <img src="assets/treinamento_capacitacao.jpeg" alt="Treinamento e Capacitação">
+                            </div>
+                            <div class="service-details-text">
+                                <h2>
+                                    <i class="fas fa-graduation-cap"></i>
+                                    Treinamento e Capacitação
+                                </h2>
+                                <div class="service-topics">
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Cursos e workshops sobre proteção radiológica:</strong> Programas educacionais abrangentes que cobrem todos os aspectos da proteção radiológica e segurança em ambientes médicos.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Treinamento de operadores de equipamentos radiológicos:</strong> Capacitação especializada para operadores, garantindo o uso seguro e eficiente dos equipamentos.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Educação continuada em segurança e saúde ocupacional:</strong> Programas de atualização contínua para manter profissionais informados sobre novas regulamentações e melhores práticas.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Consultoria Especializada -->
+                        <div class="service-detail" data-service="consultoria">
+                            <div class="service-image-container">
+                                <img src="assets/consultoria_especializada.jpg" alt="Consultoria Especializada">
+                            </div>
+                            <div class="service-details-text">
+                                <h2>
+                                    <i class="fas fa-briefcase"></i>
+                                    Consultoria Especializada
+                                </h2>
+                                <div class="service-topics">
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Orientação técnica em projetos de instalações radiológicas:</strong> Suporte especializado desde o planejamento até a implementação de novas instalações radiológicas.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Análise de documentação e processos regulatórios:</strong> Revisão completa de documentação e processos para garantir conformidade com regulamentações vigentes.</p>
+                                    </div>
+                                    <div class="topic-item">
+                                        <i class="fas fa-check"></i>
+                                        <p><strong>Suporte em casos de emergência e situações críticas:</strong> Assistência imediata e especializada em situações de emergência ou quando surgem problemas críticos relacionados à radiação.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <a href="https://wa.me/5579991625962" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>RDC RAD SERVICE</h3>
+                <p>Comprometidos em fornecer soluções abrangentes e especializadas em proteção radiológica.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Links Rápidos</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="sobre.html">Sobre nós</a></li>
+                    <li><a href="servicos.html">Serviços</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> Av. Pedro Paes de Azevedo, 194 Salgado Filho, Aracaju - SE</li>
+                    <li><i class="fas fa-phone"></i> (79) 99162-5962</li>
+                    <li><i class="fas fa-envelope"></i> rdc.radservice@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+                                            <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                <p>Copyright &copy; 2024 | Todos os direitos reservados <a href="https://andersongraca.github.io/data-insights-site/" target="_blank" style="color: inherit; text-decoration: none; font-weight: bold;">Data Solutions</a></p>
+                
+                <!-- AI-Powered Data Solutions Card -->
+                <div style="background: linear-gradient(135deg, #1a1a1a 0%, #333 100%); padding: 15px 25px; border-radius: 12px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); border: 1px solid rgba(255, 215, 0, 0.2); transition: transform 0.3s ease;">
+                    <div style="width: 35px; height: 35px; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <img src="assets/data-solutions-logo.png" alt="Data Solutions Logo" style="width: 100%; height: 100%; object-fit: contain;">
+                    </div>
+                    <div style="text-align: left;">
+                        <div style="color: var(--white); font-size: 0.8rem; opacity: 0.8; margin-bottom: 2px;">Powered by</div>
+                        <div style="color: var(--primary-color); font-weight: 700; font-size: 1rem; letter-spacing: 0.5px;">AI-Powered Data Solutions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Funcionalidade interativa para os serviços
+        document.addEventListener('DOMContentLoaded', function() {
+            const serviceItems = document.querySelectorAll('.service-item');
+            const serviceDetails = document.querySelectorAll('.service-detail');
+
+            serviceItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const serviceId = this.getAttribute('data-service');
+                    
+                    // Remove classe active de todos os itens e detalhes
+                    serviceItems.forEach(si => si.classList.remove('active'));
+                    serviceDetails.forEach(sd => sd.classList.remove('active'));
+                    
+                    // Adiciona classe active ao item clicado e seu detalhe correspondente
+                    this.classList.add('active');
+                    document.querySelector(`.service-detail[data-service="${serviceId}"]`).classList.add('active');
+                });
+            });
+
+            // Adiciona suporte a teclado
+            serviceItems.forEach((item, index) => {
+                item.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowDown' && index < serviceItems.length - 1) {
+                        serviceItems[index + 1].click();
+                        serviceItems[index + 1].focus();
+                    } else if (e.key === 'ArrowUp' && index > 0) {
+                        serviceItems[index - 1].click();
+                        serviceItems[index - 1].focus();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
