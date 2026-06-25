@@ -706,6 +706,10 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+
     .nav-menu {
         position: fixed;
         top: 100%;
@@ -716,6 +720,13 @@ body {
         transform: translateY(-100%);
         transition: transform 0.3s ease;
         z-index: 1000;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .nav-menu a {
+        padding: 12px 20px;
+        font-size: 14px;
     }
 
     .nav-menu.active {
@@ -730,16 +741,41 @@ body {
         display: none;
     }
 
+    .hero {
+        padding: 40px 0 60px 0;
+        min-height: auto;
+    }
+
+    .hero-content {
+        padding: 20px 0;
+    }
+
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2rem;
+        margin-bottom: 15px;
     }
 
     .hero-subtitle {
-        font-size: 1.2rem;
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .hero-image {
+        height: 300px;
+    }
+
+    .section {
+        padding: 40px 0;
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    .section-subtitle {
+        font-size: 1rem;
+        margin-bottom: 30px;
     }
 
     .services-grid,
@@ -747,6 +783,33 @@ body {
     .testimonials-grid,
     .values-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .service-card,
+    .team-member,
+    .testimonial,
+    .value-item {
+        padding: 20px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    input,
+    textarea,
+    select {
+        font-size: 16px;
+        padding: 12px;
+        width: 100%;
     }
 
     .whatsapp-float {
@@ -760,20 +823,146 @@ body {
     .footer-content {
         grid-template-columns: 1fr;
         text-align: center;
+        gap: 20px;
+    }
+
+    .footer-section h4 {
+        margin-top: 20px;
     }
 }
 
 @media (max-width: 480px) {
     .container {
-        padding: 0 15px;
+        padding: 0 10px;
+    }
+
+    body {
+        font-size: 14px;
+    }
+
+    .top-bar {
+        padding: 8px 0;
+        font-size: 12px;
+    }
+
+    .top-bar-content {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .header {
+        padding: 10px 0;
+    }
+
+    .header-logo {
+        font-size: 18px;
+    }
+
+    .nav-toggle {
+        font-size: 20px;
+    }
+
+    .hero {
+        padding: 30px 0 40px 0;
+    }
+
+    .hero-content {
+        padding: 15px 0;
     }
 
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+
+    .hero-image {
+        height: 250px;
     }
 
     .section {
-        padding: 60px 0;
+        padding: 30px 0;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+
+    .services-grid,
+    .team-grid,
+    .testimonials-grid,
+    .values-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .service-card,
+    .team-member,
+    .testimonial,
+    .value-item {
+        padding: 15px;
+    }
+
+    .service-card h3,
+    .team-member h3,
+    .value-item h3 {
+        font-size: 1.1rem;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        font-size: 13px;
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    input,
+    textarea,
+    select {
+        font-size: 16px;
+        padding: 10px;
+        width: 100%;
+    }
+
+    .contact-form {
+        padding: 20px;
+    }
+
+    .whatsapp-float {
+        width: 45px;
+        height: 45px;
+        bottom: 15px;
+        right: 15px;
+        font-size: 20px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .footer-section h4 {
+        margin-top: 15px;
+        font-size: 1rem;
+    }
+
+    .footer-section p,
+    .footer-section a {
+        font-size: 13px;
     }
 }
 
